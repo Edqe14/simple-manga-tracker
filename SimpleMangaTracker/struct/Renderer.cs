@@ -33,12 +33,12 @@ class Renderer {
       var key = Console.ReadKey();
       switch(key.Key) {
         case ConsoleKey.DownArrow: {
-          position = Math.Clamp(position + 1, 0, lst.Length - 1);
+          position = Math.Clamp(position + 1, 0, Math.Clamp(lst.Length - 1, 0, int.MaxValue));
           break;
         }
 
         case ConsoleKey.UpArrow: {
-          position = Math.Clamp(position - 1, 0, lst.Length - 1);
+          position = Math.Clamp(position - 1, 0, Math.Clamp(lst.Length - 1, 0, int.MaxValue));
           break;
         }
 
