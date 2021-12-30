@@ -69,7 +69,7 @@ class Renderer {
           var currentObject = GetActiveObject();
           string? hash = currentObject?.hash;
 
-          if (currentObject != null && hash != null) {
+          if (currentObject is not null && hash is not null) {
             var document = GetDocument(hash);
 
             if (document == null) {

@@ -27,7 +27,7 @@ public class StyleClass<T> : IEquatable<StyleClass<T>>
     Color = color;
   }
 
-  public bool Equals(StyleClass<T> other)
+  public bool Equals(StyleClass<T>? other)
   {
     if (other == null)
     {
@@ -37,7 +37,7 @@ public class StyleClass<T> : IEquatable<StyleClass<T>>
     return Target!.Equals(other.Target) && Color == other.Color;
   }
 
-  public override bool Equals(object obj) => Equals(obj as StyleClass<T>);
+  public override bool Equals(object? obj) => Equals(obj as StyleClass<T>);
 
   public override int GetHashCode()
   {
@@ -64,6 +64,7 @@ static class Utils
     return sb.ToString();
   }
 
+  // // https://github.com/silkfire/Pastel/pull/5/
   public static List<StyleClass<T>> GenerateGradient<T>(IEnumerable<T> input, Color startColor, Color endColor, int maxColorsInGradient)
   {
     var inputAsList = input.ToList();
@@ -79,7 +80,7 @@ static class Utils
     var colorChangeCount = 0;
 
     bool IsFirstRun(int index) => index == 0;
-    bool ShouldChangeColor(int index, int progress, T current, T previous) => (progress > numberOfGrades - 1 && !current.Equals(previous) || IsFirstRun(index));
+    bool ShouldChangeColor(int index, int progress, T current, T previous) => (progress > numberOfGrades - 1 && !current!.Equals(previous) || IsFirstRun(index));
     bool CanChangeColor(int changeCount) => changeCount < maxColorsInGradient;
 
     for (var i = 0; i < inputAsList.Count; i++)
@@ -87,7 +88,7 @@ static class Utils
       var currentItem = inputAsList[i];
       colorChangeProgress++;
 
-      if (ShouldChangeColor(i, colorChangeProgress, currentItem, previousItem) && CanChangeColor(colorChangeCount))
+      if (ShouldChangeColor(i, colorChangeProgress, currentItem, previousItem!) && CanChangeColor(colorChangeCount))
       {
         previousColor = GetGradientColor(i, startColor, endColor, inputAsList.Count);
         previousItem = currentItem;
@@ -101,6 +102,7 @@ static class Utils
     return gradients;
   }
 
+  // // https://github.com/silkfire/Pastel/pull/5/
   private static Color GetGradientColor(int index, Color startColor, Color endColor, int numberOfGrades)
   {
     var numberOfGradesAdjusted = numberOfGrades - 1;
@@ -117,6 +119,7 @@ static class Utils
     return graded;
   }
 
+  // // https://github.com/silkfire/Pastel/pull/5/
   public static string PastelWithGradient(this string input, Color startColor, Color endColor)
   {
     var gradient = GenerateGradient(input, startColor, endColor, input.Length);
