@@ -43,7 +43,7 @@ class Renderer {
         }
 
         case ConsoleKey.Enter: {
-          if (level == 2) break;
+          if (level == 2 || lst.Length == 0) break;
 
           activeObject = GetActiveObject();
           position = 0;
@@ -66,6 +66,8 @@ class Renderer {
         }
 
         case ConsoleKey.Spacebar: {
+          if (lst.Length == 0) break;
+
           var currentObject = GetActiveObject();
           string? hash = currentObject?.hash;
 
@@ -99,17 +101,16 @@ class Renderer {
 
     if (lst.Length == 0) {
       Console.WriteLine("There's nothing :(");
-      return;
-    }
+    } else {
+      foreach(var entry in lst.Select((str, index) => (str.name, str.read, index))) {
+        string padding = new String(' ', Console.WindowWidth - entry.name.Length - 1 - (entry.read ? 3 : 0));
+        string name = $"{(entry.read ? FinishedIndicator : "")} {entry.name}{padding}";
+        int index = entry.index;
 
-    foreach(var entry in lst.Select((str, index) => (str.name, str.read, index))) {
-      string padding = new String(' ', Console.WindowWidth - entry.name.Length - 1 - (entry.read ? 3 : 0));
-      string name = $"{(entry.read ? FinishedIndicator : "")} {entry.name}{padding}";
-      int index = entry.index;
+        if (position == index) name = name.Pastel(Color.Red).PastelBg(Color.White);
 
-      if (position == index) name = name.Pastel(Color.Red).PastelBg(Color.White);
-
-      Console.WriteLine(name);
+        Console.WriteLine(name);
+      }
     }
 
     Console.WriteLine();
